@@ -1,3 +1,4 @@
 node_modules
 plan.txt
 dist
+coverage
