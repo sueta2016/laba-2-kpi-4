@@ -35,8 +35,8 @@ const typesExpected: { [key: string]: TokenType[] } = {
 export function validateTokenSequence(tokens: Token[]): boolean {
 	/*
 	 * According to the task this expression: "1 + 1 + 1 ="
-	 * considered to be invalid, since it has more than one operation
-	 * The assignment to handle ONLY single operation
+	 * is considered to be invalid, since it has more than one operation
+	 * The assignment is to handle ONLY single operation
 	 **/
 	const numOperands = tokens.filter((t) => t.type === 'operand').length
 
