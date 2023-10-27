@@ -38,9 +38,9 @@ export function validateTokenSequence(tokens: Token[]): boolean {
 	 * considered to be invalid, since it has more than one operation
 	 * The assignment to handle ONLY single operation
 	 **/
-	const operands = tokens.filter((token) => token.type === 'operand')
+	const numOperands = tokens.filter((t) => t.type === 'operand').length
 
-	if (operands.length > 1) return false
+	if (numOperands > 1) return false
 
 	let expected = ['number'] as TokenType[]
 	for (const token of tokens) {
