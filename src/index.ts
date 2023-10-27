@@ -26,6 +26,30 @@ export function tokenizeInput(input: string): Token[] {
 	return tokens
 }
 
+const typesExpected: { [key: string]: TokenType[] } = {
+	number: ['number', 'operand', 'eqsign'],
+	operand: ['number'],
+	eqsign: [],
+}
+
+export function validateTokenSequence(tokens: Token[]): boolean {
+	/*
+	 * According to the task this expression: "1 + 1 + 1 ="
+	 * considered to be invalid, since it has more than one operation
+	 * The assignment to handle ONLY single operation
+	 **/
+	const operands = tokens.filter((token) => token.type === 'operand')
+
+	if (operands.length > 1) return false
+
+	let expected = ['number'] as TokenType[]
+	for (const token of tokens) {
+		if (!expected.includes(token.type)) return false
+		expected = typesExpected[token.type]
+	}
+	return true
+}
+
 export type Token = {
 	value: string
 	type: TokenType
