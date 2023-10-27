@@ -1,4 +1,4 @@
-import { getTokenType, tokenizeInput } from '..'
+import { getTokenType, tokenizeInput, validateTokenSequence } from '..'
 
 describe('tokenizeInput function', () => {
 	it('should parse input into tokens', () => {
@@ -49,10 +49,86 @@ describe('getTokenType', () => {
 		expect(getTokenType('*')).toBe('operand')
 	})
 
-	it('should throw on incorrect inputs', () => {
-		const incorrectInputs = ['11', '1т', 'месси', '1+', '1=', '00', '01']
-		incorrectInputs.forEach((input) =>
-			expect(() => getTokenType(input)).toThrow('Invalid value in file'),
-		)
+	it('should throw exception in case of number instead of digit', () => {
+		const input = '11 + 2'
+		const input2 = '01'
+		expect(() => getTokenType(input)).toThrow('Invalid value in file')
+		expect(() => getTokenType(input2)).toThrow('Invalid value in file')
+	})
+
+	it('should throw exception on non-allowed char in input', () => {
+		const input = '1т'
+		const input2 = 'месси'
+		expect(() => getTokenType(input)).toThrow('Invalid value in file')
+		expect(() => getTokenType(input2)).toThrow('Invalid value in file')
+	})
+
+	it('should throw exception on operand close to number', () => {
+		const input = '1+'
+		const input2 = '1='
+
+		expect(() => getTokenType(input)).toThrow('Invalid value in file')
+		expect(() => getTokenType(input2)).toThrow('Invalid value in file')
+	})
+})
+
+describe('validateTokenSequence', () => {
+	it('should return true (2 numbers)', () => {
+		const input = '1 2'
+		const tokenSequence = tokenizeInput(input)
+
+		expect(validateTokenSequence(tokenSequence)).toBe(true)
+	})
+
+	it('should return true (operand after number)', () => {
+		const input = '1 -'
+		const tokenSequence = tokenizeInput(input)
+
+		expect(validateTokenSequence(tokenSequence)).toBe(true)
+	})
+
+	it('should return true (operand between numbers)', () => {
+		const input = '1 - 1'
+		const tokenSequence = tokenizeInput(input)
+
+		expect(validateTokenSequence(tokenSequence)).toBe(true)
+	})
+
+	it('should return true (operand between numbers and then equal)', () => {
+		const input = '3 - 1 1 ='
+		const tokenSequence = tokenizeInput(input)
+
+		expect(validateTokenSequence(tokenSequence)).toBe(true)
+	})
+
+	it('should throw execption on operand at start', () => {
+		const input = '* 1'
+		const tokenSequence = tokenizeInput(input)
+		expect(validateTokenSequence(tokenSequence)).toBe(false)
+	})
+
+	it('should throw execption on equal sign at start', () => {
+		const input = '= - 1'
+		const tokenSequence = tokenizeInput(input)
+		expect(validateTokenSequence(tokenSequence)).toBe(false)
+	})
+
+	it('should throw execption on operand after operand', () => {
+		const input = '1 + +'
+		const tokenSequence = tokenizeInput(input)
+		expect(validateTokenSequence(tokenSequence)).toBe(false)
+	})
+
+	it('should throw execption on equal sign after operand', () => {
+		const input = '3 - 1 + ='
+		const tokenSequence = tokenizeInput(input)
+		expect(validateTokenSequence(tokenSequence)).toBe(false)
+	})
+
+	it('should throw execption on several operands in expression', () => {
+		const input = '1 + 1 + 1 ='
+
+		const tokenSequence = tokenizeInput(input)
+		expect(validateTokenSequence(tokenSequence)).toBe(false)
 	})
 })
