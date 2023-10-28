@@ -78,6 +78,6 @@ export function calculate(tokens: Token[]): number {
 				break
 		}
 	}
-
+	// i
 	return result
 }
