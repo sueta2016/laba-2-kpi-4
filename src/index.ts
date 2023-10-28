@@ -50,6 +50,38 @@ export function validateTokenSequence(tokens: Token[]): boolean {
 	return true
 }
 
+const operations: { [key: string]: (a: number, b: number) => number } = {
+	'+': (a, b) => a + b,
+	'-': (a, b) => a - b,
+	'/': (a, b) => Math.floor(a / b),
+	'*': (a, b) => a * b,
+}
+
+export function calculate(tokens: Token[]): number {
+	let result = 0
+	let operand = ''
+	let numTmp = ''
+	for (let i = 0; i < tokens.length; i++) {
+		const token = tokens[i]
+		switch (token.type) {
+			case 'number':
+				numTmp += token.value
+				if (tokens.length - 1 === i) result = Number(numTmp)
+				break
+			case 'operand':
+				operand = token.value
+				result += Number(numTmp)
+				numTmp = ''
+				break
+			default:
+				result = operations[operand](result, Number(numTmp))
+				break
+		}
+	}
+
+	return result
+}
+
 export type Token = {
 	value: string
 	type: TokenType
