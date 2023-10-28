@@ -3,7 +3,7 @@ import {
 	getTokenType,
 	tokenizeInput,
 	validateTokenSequence,
-} from '..'
+} from '../calculate'
 
 describe('tokenizeInput function', () => {
 	it('should parse input into tokens', () => {
