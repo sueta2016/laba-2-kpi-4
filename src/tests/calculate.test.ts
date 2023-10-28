@@ -8,7 +8,7 @@ import {
 describe('tokenizeInput function', () => {
 	it('should parse input into tokens', () => {
 		// Arrange
-		const input = '1 + 2 ='
+		const input = '1 + 3 ='
 		const expected = [
 			{ value: '1', type: 'number' },
 			{ value: '+', type: 'operand' },
