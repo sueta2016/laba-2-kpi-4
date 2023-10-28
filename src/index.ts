@@ -1,6 +1,6 @@
-const operands = ['+', '-', '/', '*']
+import { Token, TokenType } from './types'
 
-type TokenType = 'number' | 'operand' | 'eqsign'
+const operands = ['+', '-', '/', '*']
 
 const singleNumberRegExp = /^[0-9]$/
 
@@ -80,9 +80,4 @@ export function calculate(tokens: Token[]): number {
 	}
 
 	return result
-}
-
-export type Token = {
-	value: string
-	type: TokenType
 }
