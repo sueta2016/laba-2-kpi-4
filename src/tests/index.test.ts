@@ -1,4 +1,9 @@
-import { getTokenType, tokenizeInput, validateTokenSequence } from '..'
+import {
+	calculate,
+	getTokenType,
+	tokenizeInput,
+	validateTokenSequence,
+} from '..'
 
 describe('tokenizeInput function', () => {
 	it('should parse input into tokens', () => {
@@ -130,5 +135,68 @@ describe('validateTokenSequence', () => {
 
 		const tokenSequence = tokenizeInput(input)
 		expect(validateTokenSequence(tokenSequence)).toBe(false)
+	})
+})
+
+describe('calculate', () => {
+	it('should sum correctly', () => {
+		const input = '1 2 3 + 4 5 6 ='
+		const tokens = tokenizeInput(input)
+
+		expect(calculate(tokens)).toBe(579)
+	})
+	it('should substract correctly', () => {
+		const input1 = '3 - 1 ='
+		const input2 = '1 0 - 9 0 ='
+		const tokens1 = tokenizeInput(input1)
+		const tokens2 = tokenizeInput(input2)
+
+		expect(calculate(tokens1)).toBe(2)
+		expect(calculate(tokens2)).toBe(-80)
+	})
+	it('should divide correctly', () => {
+		const input = '6 / 2 ='
+		const input2 = '1 0 0 / 3 ='
+		const tokens = tokenizeInput(input)
+		const tokens2 = tokenizeInput(input2)
+
+		expect(calculate(tokens)).toBe(3)
+		expect(calculate(tokens2)).toBe(33)
+	})
+	it('should multiply correctly', () => {
+		const input = '4 * 8 ='
+		const tokens = tokenizeInput(input)
+
+		expect(calculate(tokens)).toBe(32)
+	})
+
+	it('should return 0 on empty input', () => {
+		const input = ''
+		const tokens = tokenizeInput(input)
+		expect(calculate(tokens)).toBe(0)
+	})
+
+	it('should return input number if there is no operations', () => {
+		const input = '1 2 3'
+		const tokens = tokenizeInput(input)
+		expect(calculate(tokens)).toBe(123)
+	})
+
+	it('should return input number if there is no second number', () => {
+		const input = '1 2 3 +'
+		const tokens = tokenizeInput(input)
+		expect(calculate(tokens)).toBe(123)
+	})
+
+	it('should return second number if there is operations and no eqsign', () => {
+		const input = '1 2 3 + 4 5 6'
+		const tokens = tokenizeInput(input)
+		expect(calculate(tokens)).toBe(456)
+	})
+
+	it('should return 0 on empty input', () => {
+		const input = ''
+		const tokens = tokenizeInput(input)
+		expect(calculate(tokens)).toBe(0)
 	})
 })
